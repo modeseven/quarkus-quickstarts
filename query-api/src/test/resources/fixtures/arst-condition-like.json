@@ -1,0 +1,28 @@
+{
+  "name": "ARST roster - condition LN LK (LIKE)",
+  "description": "Single condition using LIKE operator on last name. LN LK STAR matches STARR (contains 'STAR'). Verifies LK operator generates LIKE with wildcards.",
+  "request": {
+    "function": "ROSTER",
+    "selectionCategory": "ARST",
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "orgScope": { "type": "FACL", "code": "BOP" },
+    "conditions": [
+      { "group": 1, "rules": [{ "field": "LN", "op": "LK", "value": "STAR" }] }
+    ]
+  },
+  "expected": {
+    "count": 1,
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "demoStats": {
+      "total": 1,
+      "m": 1,
+      "f": 0,
+      "w": 1,
+      "b": 0,
+      "i": 0,
+      "a": 0,
+      "h": 0,
+      "o": 0
+    }
+  }
+}

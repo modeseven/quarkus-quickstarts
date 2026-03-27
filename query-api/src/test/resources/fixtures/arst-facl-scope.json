@@ -1,0 +1,25 @@
+{
+  "name": "ARST roster - facility scope FCI",
+  "description": "Scoped to single facility FCI. Verifies FACL-level org filtering (WHERE i.code_facl = 'FCI'). 16 FCI inmates (15 base + 1 fanout demo).",
+  "request": {
+    "function": "ROSTER",
+    "selectionCategory": "ARST",
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "orgScope": { "type": "FACL", "code": "FCI" }
+  },
+  "expected": {
+    "count": 16,
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "demoStats": {
+      "total": 16,
+      "m": 16,
+      "f": 0,
+      "w": 9,
+      "b": 6,
+      "i": 0,
+      "a": 1,
+      "h": 3,
+      "o": 0
+    }
+  }
+}

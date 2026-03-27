@@ -1,0 +1,29 @@
+{
+  "name": "ARST roster - multi-group conditions (OR across groups)",
+  "description": "Two condition groups: group 1 filters FACL=FCI, group 2 filters FACL=FPC. Verifies AND-within-group / OR-across-groups logic. Both match, so full BOP population.",
+  "request": {
+    "function": "ROSTER",
+    "selectionCategory": "ARST",
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "orgScope": { "type": "FACL", "code": "BOP" },
+    "conditions": [
+      { "group": 1, "rules": [{ "field": "FACL", "op": "EQ", "value": "FCI" }] },
+      { "group": 2, "rules": [{ "field": "FACL", "op": "EQ", "value": "FPC" }] }
+    ]
+  },
+  "expected": {
+    "count": 26,
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "demoStats": {
+      "total": 26,
+      "m": 26,
+      "f": 0,
+      "w": 16,
+      "b": 8,
+      "i": 0,
+      "a": 2,
+      "h": 5,
+      "o": 0
+    }
+  }
+}

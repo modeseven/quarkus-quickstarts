@@ -1,0 +1,39 @@
+14. CONDITIONS:
+• Three sets of CONDITIONS across, and ten down in each row.
+• To identify additional conditions the inmates must meet to be selected for the census or roster.
+• Each condition has three fields - XXXX XX XXXXXXXXX.
+
+• Any category or code from the PP30 Conditions Table.
+
+• If category code is keyed in first three positions, the fourth position may be:
+
+  G - Group Code - WRKG.
+  D - Date of Assignment - WRKD.
+  T - Time of Assignment - WRKT.
+
+• Use SEL if category in SELECTION CATEGORY allows multiple assignments.
+
+SECOND FIELD: Must be one of these:
+  EQ - Equal to.
+  NE - Not equal to.
+  LT - Less than.
+  LE - Less than or equal to.
+  GT - Greater than.
+  GE - Greater than or equal to.
+  NN - Not equal and none of the multiple assignments are equal. USE ONLY WITH CATEGORIES WHICH ALLOW MULTIPLE ASSIGNMENTS.
+
+THIRD FIELD: Any PP30 Condition Code.
+
+DISCUSSION OF CONDITIONS:
+
+• There are two types of conditions.
+
+  AND: Inmate must meet ALL conditions that are listed DOWN in one of the CONDITION GROUPS.
+
+  OR: Inmate meets ANY condition listed ACROSS in the CONDITION GROUPS
+
+• There are three CONDITION GROUPS across and you can specify up to 10 conditions down in each group. For an inmate to be selected, all of the conditions listed down in one group must be true.
+
+• If an inmate fails to meet any condition in one group, the individual will still be selected for the report if the inmate meets all conditions down in one of the other groups.
+
+• If a condition is keyed in GROUP 1, it is automatically considered part of the conditions in GROUPS 2 and 3 if the corresponding lines across in Groups 2 and 3 are blank.

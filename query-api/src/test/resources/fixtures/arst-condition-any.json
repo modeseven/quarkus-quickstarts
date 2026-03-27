@@ -1,0 +1,16 @@
+{
+  "name": "ARST condition grid - CSW ANY",
+  "description": "Universal keyword ANY in condition grid means 'has any non-blank value'. 25 of 26 inmates have CSW assignments (inmate 100 has no CSW record).",
+  "request": {
+    "function": "ROSTER",
+    "selectionCategory": "ARST",
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "orgScope": { "type": "FACL", "code": "BOP" },
+    "conditions": [
+      { "group": 1, "rules": [{ "field": "CSW", "op": "EQ", "value": "ANY" }] }
+    ]
+  },
+  "expected": {
+    "count": 25
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "ARST roster with CCOM columns (PRD, DETN)",
+  "description": "Hub + CCOM spoke columns (DIRECT_SPOKE join shape). Verifies LEFT JOIN to ccom on intkey. Count stays 26 because CCOM is 1:1 (no fanout).",
+  "request": {
+    "function": "ROSTER",
+    "selectionCategory": "ARST",
+    "columns": ["REG", "LN", "FN", "FACL", "PRD", "DETN"],
+    "orgScope": { "type": "FACL", "code": "BOP" }
+  },
+  "expected": {
+    "count": 26,
+    "columns": ["REG", "LN", "FN", "FACL", "PRD", "DETN"],
+    "demoStats": {
+      "total": 26,
+      "m": 26,
+      "f": 0,
+      "w": 16,
+      "b": 8,
+      "i": 0,
+      "a": 2,
+      "h": 5,
+      "o": 0
+    }
+  }
+}

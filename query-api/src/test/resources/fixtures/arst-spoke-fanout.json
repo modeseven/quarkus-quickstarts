@@ -1,0 +1,25 @@
+{
+  "name": "ARST roster with WRK spoke - fanout on inmate 100",
+  "description": "Adds WRK as display column at FCI. Inmate 100 (STARR) has 2 WRK assignments, producing 2 rows via cartesian product. count=17 but demoStats.total=16 proves COUNT DISTINCT works correctly despite row multiplication.",
+  "request": {
+    "function": "ROSTER",
+    "selectionCategory": "ARST",
+    "columns": ["REG", "LN", "FN", "FACL", "WRK"],
+    "orgScope": { "type": "FACL", "code": "FCI" }
+  },
+  "expected": {
+    "count": 17,
+    "columns": ["REG", "LN", "FN", "FACL", "WRK"],
+    "demoStats": {
+      "total": 16,
+      "m": 16,
+      "f": 0,
+      "w": 9,
+      "b": 6,
+      "i": 0,
+      "a": 1,
+      "h": 3,
+      "o": 0
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "ARST condition grid - CSW NONE",
+  "description": "Universal keyword NONE in condition grid means 'has no value'. Inmate 100 has a CSW record with blank assignment, so count is 1. Tests the 'has record but blank value' scenario.",
+  "request": {
+    "function": "ROSTER",
+    "selectionCategory": "ARST",
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "orgScope": { "type": "FACL", "code": "BOP" },
+    "conditions": [
+      { "group": 1, "rules": [{ "field": "CSW", "op": "EQ", "value": "NONE" }] }
+    ]
+  },
+  "expected": {
+    "count": 1
+  }
+}

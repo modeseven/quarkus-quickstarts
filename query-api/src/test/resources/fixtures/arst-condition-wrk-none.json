@@ -1,0 +1,16 @@
+{
+  "name": "ARST condition grid - WRK NONE (blank assignment)",
+  "description": "WRK NONE catches inmate 25 who has a WRK record with blank assignment. Tests the 'has record but blank value' scenario (vs LEFT JOIN miss).",
+  "request": {
+    "function": "ROSTER",
+    "selectionCategory": "ARST",
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "orgScope": { "type": "FACL", "code": "BOP" },
+    "conditions": [
+      { "group": 1, "rules": [{ "field": "WRK", "op": "EQ", "value": "NONE" }] }
+    ]
+  },
+  "expected": {
+    "count": 1
+  }
+}

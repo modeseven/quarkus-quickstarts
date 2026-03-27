@@ -1,0 +1,14 @@
+{
+  "name": "ARST selection filter - assignment ALL",
+  "description": "Explicit ALL keyword skips assignment filter (trueCondition). Same result as omitting assignment entirely.",
+  "request": {
+    "function": "ROSTER",
+    "selectionCategory": "ARST",
+    "assignment": "ALL",
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "orgScope": { "type": "FACL", "code": "BOP" }
+  },
+  "expected": {
+    "count": 26
+  }
+}

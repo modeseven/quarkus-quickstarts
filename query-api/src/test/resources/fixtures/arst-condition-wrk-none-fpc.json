@@ -1,0 +1,20 @@
+{
+  "name": "ARST roster - FPC scope with condition WRK EQ NONE",
+  "description": "ARS EQ ALL at FPC with condition WRK EQ NONE. Inmate 25 has a WRK record with blank assignment, so count is 1. Tests 'has record but blank value' scenario.",
+  "request": {
+    "function": "ROSTER",
+    "selectionCategory": "ARST",
+    "assignment": "ALL",
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "orgScope": { "type": "FACL", "code": "FPC" },
+    "conditions": [
+      { "group": 1, "rules": [{ "field": "WRK", "op": "EQ", "value": "NONE" }] }
+    ]
+  },
+  "expected": {
+    "count": 1,
+    "rows": [
+      { "REG": 10025, "LN": "PATEL", "FN": "RAJESH", "FACL": "FPC" }
+    ]
+  }
+}

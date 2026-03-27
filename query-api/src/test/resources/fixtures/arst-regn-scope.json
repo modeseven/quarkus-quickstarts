@@ -1,0 +1,25 @@
+{
+  "name": "ARST roster - region scope MXR",
+  "description": "Scoped to region MXR (contains only FCI). Verifies REGN org filtering via FACL join with facl_fk_regn. Same result as FACL FCI.",
+  "request": {
+    "function": "ROSTER",
+    "selectionCategory": "ARST",
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "orgScope": { "type": "REGN", "code": "MXR" }
+  },
+  "expected": {
+    "count": 16,
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "demoStats": {
+      "total": 16,
+      "m": 16,
+      "f": 0,
+      "w": 9,
+      "b": 6,
+      "i": 0,
+      "a": 1,
+      "h": 3,
+      "o": 0
+    }
+  }
+}

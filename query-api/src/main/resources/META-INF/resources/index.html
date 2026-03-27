@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Query Workbench</title>
+<style>
+  * { box-sizing: border-box; font-family: 'Consolas', 'Monaco', monospace; font-size: 13px; }
+  body { margin: 20px; background: #1e1e1e; color: #d4d4d4; }
+  h2 { color: #569cd6; margin: 0 0 12px; }
+  .row { display: flex; gap: 12px; margin-bottom: 8px; align-items: center; flex-wrap: wrap; }
+  label { color: #9cdcfe; min-width: 80px; }
+  select, input[type=text] { background: #2d2d2d; color: #ce9178; border: 1px solid #444; padding: 4px 6px; }
+  select { min-width: 100px; }
+  input[type=text] { width: 120px; }
+  button { background: #0e639c; color: #fff; border: none; padding: 6px 16px; cursor: pointer; }
+  button:hover { background: #1177bb; }
+  .cond-row { display: flex; gap: 6px; margin: 2px 0; }
+  .cond-row select, .cond-row input { font-size: 12px; }
+  #status { color: #608b4e; margin: 8px 0; }
+  table { border-collapse: collapse; margin-top: 8px; width: 100%; }
+  th { background: #264f78; color: #fff; padding: 4px 8px; text-align: left; border: 1px solid #444; }
+  td { padding: 4px 8px; border: 1px solid #333; }
+  tr:nth-child(even) { background: #2a2a2a; }
+  tr:hover { background: #264f78; }
+  .section { border: 1px solid #333; padding: 8px; margin-bottom: 8px; }
+  .section-title { color: #569cd6; font-weight: bold; margin-bottom: 4px; }
+  small { color: #666; }
+  #add-cond { background: #333; color: #9cdcfe; border: 1px solid #555; padding: 2px 8px; cursor: pointer; font-size: 11px; }
+  .census-bar { color: #9cdcfe; margin: 8px 0; font-size: 12px; padding: 6px 8px; background: #252526; border: 1px solid #333; }
+  .census-bar span { margin-right: 12px; }
+  .census-bar .label { color: #608b4e; }
+</style>
+</head>
+<body>
+<h2>SENTRY Query Workbench</h2>
+
+<div class="section">
+  <div class="section-title">Primary Filter</div>
+  <div class="row">
+    <label>Function</label>
+    <select id="queryFn">
+      <option value="ROSTER">ROSTER</option>
+      <option value="CENSUS">CENSUS</option>
+    </select>
+    <label>Sel Category</label>
+    <input type="text" id="selCat" value="ARS" style="width:60px"
+      title="Category code (3 chars) + optional suffix: G=Group D=Date T=Time. Examples: ARS, WRKG, DSTD, ARST"
+      placeholder="e.g. ARS">
+    <label>Op</label>
+    <select id="selOp">
+      <option>EQ</option><option>NE</option><option>GT</option>
+      <option>LT</option><option>GE</option><option>LE</option>
+    </select>
+    <label>Assignment</label>
+    <input type="text" id="assn" value="ALL" placeholder="ALL, value, or group code (e.g. *C**)"
+      title="Assignment value, or 4-char group code with * wildcards if category ends in G">
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Organization Scope</div>
+  <div class="row">
+    <label>Org Type</label>
+    <select id="orgType">
+      <option value="">--</option>
+      <option value="FACL">FACL</option>
+      <option value="REGN">REGN</option>
+      <option value="AGEN">AGEN</option>
+      <option value="DEPT">DEPT</option>
+    </select>
+    <label>Code</label>
+    <input type="text" id="orgCode" placeholder="BOP or facility code">
+    <label>TOF</label>
+    <input type="text" id="tof" placeholder="e.g. TCM" style="width:60px" title="Type of Facility: T=Typical C=Community M=Management V=Buses I=Intransit B=CTCs P=Prolonged S=Staff">
+    <label>FMB</label>
+    <input type="text" id="fmb" placeholder="e.g. AP" style="width:60px" title="Facility Managed By: A=Agency P=Private AP=Both">
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Display Controls</div>
+  <div class="row">
+    <label>Dup Supr</label>
+    <select id="dupSupr" title="YES=suppress duplicate display, NO=show all, OUT=include released (ARS only)">
+      <option value="YES">YES</option>
+      <option value="NO">NO</option>
+      <option value="OUT">OUT</option>
+    </select>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Columns <small>(comma-separated search keys)</small></div>
+  <div class="row">
+    <input type="text" id="columns" value="REG,LN,FN" style="width:100%;max-width:600px"
+      title="Hub: REG LN FN FACL CITZ | Categories: ARS QTR UNT WRK CSW CMA CSA PGM COM CAR DST FRP BIL CMC | Suffixes: G=Group D=Date T=Time (e.g. WRKG WRKD WRKT) | Spoke: PRD PRM DETN"
+      placeholder="e.g. REG,LN,FN,ARS,WRKG,DSTD">
+  </div>
+  <div style="color:#666;font-size:11px;margin-top:2px">
+    Suffix any category with G (Group), D (Date), or T (Time) — e.g. WRKG, WRKD, WRKT
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Conditions <small>(AND within group, OR across groups)</small></div>
+  <div id="conditions"></div>
+  <button id="add-cond" onclick="addCondition()">+ Add Condition</button>
+</div>
+
+<div class="row">
+  <button onclick="runQuery()">Run Query</button>
+  <button id="copyFixture" onclick="copyFixtureJson()" style="display:none;background:#333;border:1px solid #555">Copy Fixture JSON</button>
+  <span id="status"></span>
+</div>
+
+<div id="census"></div>
+<div id="results"></div>
+
+<script>
+const OPS = ['EQ','NE','GT','LT','GE','LE','LK'];
+
+let condCount = 0;
+function addCondition() {
+  condCount++;
+  const div = document.createElement('div');
+  div.className = 'cond-row';
+  div.innerHTML = `
+    <label>Grp</label><input type="text" style="width:30px" value="1" class="cond-grp">
+    <label>Field</label><input type="text" class="cond-field" style="width:60px" placeholder="e.g. ARS" title="Search key (supports G/D/T suffixes)">
+    <label>Op</label><select class="cond-op">${OPS.map(o=>'<option>'+o+'</option>').join('')}</select>
+    <label>Value</label><input type="text" class="cond-val" style="width:140px">
+    <button onclick="this.parentElement.remove()" style="background:#5a1d1d;padding:2px 6px;font-size:11px">x</button>
+  `;
+  document.getElementById('conditions').appendChild(div);
+}
+
+function renderCensus(c) {
+  if (!c) { document.getElementById('census').innerHTML = ''; return; }
+  document.getElementById('census').innerHTML = `
+    <div class="census-bar">
+      <span><span class="label">Total:</span> ${c.total}</span>
+      <span><span class="label">Sex:</span> M:${c.m} F:${c.f}</span>
+      <span><span class="label">Race:</span> W:${c.w} B:${c.b} I:${c.i} A:${c.a}</span>
+      <span><span class="label">Eth:</span> H:${c.h} O:${c.o}</span>
+    </div>`;
+}
+
+async function runQuery() {
+  const fn = document.getElementById('queryFn').value;
+  const cols = document.getElementById('columns').value.split(',').map(s => s.trim().toUpperCase()).filter(s => s);
+  if (fn === 'ROSTER' && cols.length === 0) { document.getElementById('status').textContent = 'Enter at least one column'; return; }
+
+  // Build conditions grouped
+  const condRows = document.querySelectorAll('.cond-row');
+  const groups = {};
+  condRows.forEach(row => {
+    const grp = parseInt(row.querySelector('.cond-grp').value) || 1;
+    const field = row.querySelector('.cond-field').value.trim().toUpperCase();
+    const op = row.querySelector('.cond-op').value;
+    const val = row.querySelector('.cond-val').value;
+    if (!val) return;
+    if (!groups[grp]) groups[grp] = [];
+    groups[grp].push({ field, op, value: val });
+  });
+  const conditions = Object.entries(groups).map(([g, rules]) => ({ group: parseInt(g), rules }));
+
+  const body = {
+    function: fn,
+    selectionCategory: document.getElementById('selCat').value.trim().toUpperCase(),
+    operator: document.getElementById('selOp').value,
+    assignment: document.getElementById('assn').value || 'ALL',
+    columns: fn === 'CENSUS' ? [] : cols,
+    duplicateSuppression: document.getElementById('dupSupr').value,
+  };
+
+  // OrgScope
+  const orgType = document.getElementById('orgType').value;
+  const orgCode = document.getElementById('orgCode').value.trim();
+  const tof = document.getElementById('tof').value.trim();
+  const fmb = document.getElementById('fmb').value.trim();
+  if (orgCode || tof || fmb) {
+    body.orgScope = {};
+    if (orgType) body.orgScope.type = orgType;
+    if (orgCode) body.orgScope.code = orgCode;
+    if (tof) body.orgScope.typeOfFacility = tof;
+    if (fmb) body.orgScope.facilityManagedBy = fmb;
+  }
+
+  if (conditions.length > 0) body.conditions = conditions;
+
+  document.getElementById('status').textContent = 'Running...';
+  document.getElementById('census').innerHTML = '';
+  const t0 = performance.now();
+
+  try {
+    const res = await fetch('/api/query', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) {
+      const txt = await res.text();
+      document.getElementById('status').textContent = 'Error: ' + res.status;
+      document.getElementById('results').innerHTML = '<pre style="color:#f44">' + txt.substring(0, 500) + '</pre>';
+      return;
+    }
+    const data = await res.json();
+    const ms = Math.round(performance.now() - t0);
+    document.getElementById('status').textContent = `${data.count} rows in ${ms}ms`;
+
+    // Store for fixture extraction
+    window._lastRequest = body;
+    window._lastResponse = data;
+    document.getElementById('copyFixture').style.display = 'inline';
+
+    // Census bar
+    renderCensus(data.demoStats);
+
+    // Build table
+    if (data.rows.length === 0) {
+      document.getElementById('results').innerHTML = '<p>No results</p>';
+      return;
+    }
+    let html = '<table><tr>' + data.columns.map(c => '<th>' + c + '</th>').join('') + '</tr>';
+    data.rows.forEach(row => {
+      html += '<tr>' + data.columns.map(c => '<td>' + (row[c] ?? '') + '</td>').join('') + '</tr>';
+    });
+    html += '</table>';
+    document.getElementById('results').innerHTML = html;
+  } catch (e) {
+    document.getElementById('status').textContent = 'Fetch error: ' + e.message;
+  }
+}
+
+// Add one condition row by default
+addCondition();
+
+// Copy last query as a test fixture JSON
+function copyFixtureJson() {
+  if (!window._lastRequest || !window._lastResponse) return;
+  const name = prompt('Fixture name:', '');
+  const desc = prompt('Description:', '');
+  if (name === null) return;
+
+  const fixture = {
+    name: name || 'unnamed',
+    description: desc || '',
+    request: window._lastRequest,
+    expected: {
+      count: window._lastResponse.count,
+      columns: window._lastResponse.columns,
+      demoStats: window._lastResponse.demoStats
+    }
+  };
+
+  const json = JSON.stringify(fixture, null, 2);
+  navigator.clipboard.writeText(json).then(() => {
+    document.getElementById('status').textContent += ' — fixture JSON copied!';
+  }).catch(() => {
+    // Fallback: show in a prompt for manual copy
+    prompt('Copy this fixture JSON:', json);
+  });
+}
+
+// Dynamic org type behavior — update placeholder, TOF/FMB always enabled
+document.getElementById('orgType').addEventListener('change', function() {
+  const placeholders = {
+    'FACL': 'BOP or facility code (e.g. FCI)',
+    'REGN': 'Region (MXR, NCR, NER, SCR, SER, WXR)',
+    'AGEN': 'Agency (BOP, PAR, USM, CRM, INS)',
+    'DEPT': 'Department (DOJ, DHS)',
+    '': 'BOP or facility code'
+  };
+  document.getElementById('orgCode').placeholder = placeholders[this.value] || '';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "name": "ARST basic roster - all facilities",
+  "description": "BOP-wide ARST roster, no conditions, default sort. Seed data: 26 inmates (16 FCI, 10 FPC).",
+  "request": {
+    "function": "ROSTER",
+    "selectionCategory": "ARST",
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "orgScope": { "type": "FACL", "code": "BOP" }
+  },
+  "expected": {
+    "count": 26,
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "demoStats": {
+      "total": 26,
+      "m": 26,
+      "f": 0,
+      "w": 16,
+      "b": 8,
+      "i": 0,
+      "a": 2,
+      "h": 5,
+      "o": 0
+    }
+  }
+}

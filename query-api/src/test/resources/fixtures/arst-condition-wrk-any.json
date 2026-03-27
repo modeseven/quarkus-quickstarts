@@ -1,0 +1,28 @@
+{
+  "name": "ARST roster - FCI scope with condition WRK EQ ANY",
+  "description": "ARS EQ ALL at FCI with condition WRK EQ ANY. All 16 FCI inmates have WRK records (inmate 100 has 2), so 17 rows. Mirrors legacy query pattern.",
+  "request": {
+    "function": "ROSTER",
+    "selectionCategory": "ARST",
+    "assignment": "ALL",
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "orgScope": { "type": "FACL", "code": "FCI" },
+    "conditions": [
+      { "group": 1, "rules": [{ "field": "WRK", "op": "EQ", "value": "ANY" }] }
+    ]
+  },
+  "expected": {
+    "count": 17,
+    "demoStats": {
+      "total": 16,
+      "m": 16,
+      "f": 0,
+      "w": 9,
+      "b": 6,
+      "i": 0,
+      "a": 1,
+      "h": 3,
+      "o": 0
+    }
+  }
+}

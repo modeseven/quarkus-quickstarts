@@ -1,0 +1,25 @@
+{
+  "name": "ARST census - all facilities",
+  "description": "BOP-wide ARST census: grouped demographic counts. 26 inmates produce 4 assignment groups.",
+  "request": {
+    "function": "CENSUS",
+    "selectionCategory": "ARST",
+    "columns": [],
+    "orgScope": { "type": "FACL", "code": "BOP" }
+  },
+  "expected": {
+    "count": 4,
+    "columns": ["GRP", "SPECIFIC", "TOTAL", "MALE", "FEM", "WHITE", "BLACK", "AM_IN", "ASIAN", "HISP", "OTHER"],
+    "demoStats": {
+      "total": 26, "m": 26, "f": 0,
+      "w": 16, "b": 8, "i": 0, "a": 2,
+      "h": 5, "o": 0
+    },
+    "rows": [
+      { "GRP": "CI", "SPECIFIC": "A-DES", "TOTAL": 1, "MALE": 1, "FEM": 0, "WHITE": 1, "BLACK": 0, "AM_IN": 0, "ASIAN": 0, "HISP": 0, "OTHER": 0 },
+      { "GRP": "CI", "SPECIFIC": "CUR ADMIT", "TOTAL": 21, "MALE": 21, "FEM": 0, "WHITE": 12, "BLACK": 7, "AM_IN": 0, "ASIAN": 2, "HISP": 3, "OTHER": 0 },
+      { "GRP": "TR", "SPECIFIC": "IN TRANSIT", "TOTAL": 2, "MALE": 2, "FEM": 0, "WHITE": 2, "BLACK": 0, "AM_IN": 0, "ASIAN": 0, "HISP": 2, "OTHER": 0 },
+      { "GRP": "WB", "SPECIFIC": "WRIT/BORRO", "TOTAL": 2, "MALE": 2, "FEM": 0, "WHITE": 1, "BLACK": 1, "AM_IN": 0, "ASIAN": 0, "HISP": 0, "OTHER": 0 }
+    ]
+  }
+}

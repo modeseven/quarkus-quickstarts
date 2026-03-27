@@ -1,0 +1,25 @@
+{
+  "name": "ARST roster - agency scope BOP",
+  "description": "Scoped to agency BOP via AGEN org type. Verifies AGEN subquery on regn.regn_fk_agen. Both FCI (MXR) and FPC (SER) are under BOP, so full population.",
+  "request": {
+    "function": "ROSTER",
+    "selectionCategory": "ARST",
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "orgScope": { "type": "AGEN", "code": "BOP" }
+  },
+  "expected": {
+    "count": 26,
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "demoStats": {
+      "total": 26,
+      "m": 26,
+      "f": 0,
+      "w": 16,
+      "b": 8,
+      "i": 0,
+      "a": 2,
+      "h": 5,
+      "o": 0
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "ARST roster with CNUM columns (SSN, FBI)",
+  "description": "Hub + CNUM typed spoke columns (TYPED_SPOKE join shape). Verifies LEFT JOIN with type discrimination on cod_typ_num. Some inmates have null FBI; STARR has null SSN and FBI.",
+  "request": {
+    "function": "ROSTER",
+    "selectionCategory": "ARST",
+    "columns": ["REG", "LN", "FN", "SSN", "FBI"],
+    "orgScope": { "type": "FACL", "code": "BOP" }
+  },
+  "expected": {
+    "count": 26,
+    "columns": ["REG", "LN", "FN", "SSN", "FBI"],
+    "demoStats": {
+      "total": 26,
+      "m": 26,
+      "f": 0,
+      "w": 16,
+      "b": 8,
+      "i": 0,
+      "a": 2,
+      "h": 5,
+      "o": 0
+    }
+  }
+}

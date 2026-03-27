@@ -1,0 +1,25 @@
+{
+  "name": "ARST roster - TOF filter L (low security)",
+  "description": "BOP-wide with typeOfFacility='L'. FCI has TOF='L' (16 inmates), FPC has TOF='M'. Verifies TOF char-splitting and IN clause on facl.code_tof.",
+  "request": {
+    "function": "ROSTER",
+    "selectionCategory": "ARST",
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "orgScope": { "type": "FACL", "code": "BOP", "typeOfFacility": "L" }
+  },
+  "expected": {
+    "count": 16,
+    "columns": ["REG", "LN", "FN", "FACL"],
+    "demoStats": {
+      "total": 16,
+      "m": 16,
+      "f": 0,
+      "w": 9,
+      "b": 6,
+      "i": 0,
+      "a": 1,
+      "h": 3,
+      "o": 0
+    }
+  }
+}
